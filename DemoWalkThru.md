@@ -1,7 +1,7 @@
 ## Firewalld Demo WalkThru
 
 ### Requirements
-* Minimum VM: 1vCPU x 1G mem, running RHEL 7.latest
+* Minimum VM: 1vCPU x 1G mem, running RHEL 7.latest or RHEL 8.latest
 
 ### WalkThru
 * Setup via firewalld-setup.sh
@@ -23,8 +23,7 @@
 ```
 * Try http://demo-vm again
   * This should work, you should see Red Hat default apache start page
-* Try something dumb, but leave a way to save yourself
-  * Scenario: remote system that you don't have easy access to, so making a mistake with the firewall config could lead to a "resume generating event"
+* Scenario: remote system that you don't have easy access to, so making a mistake with the firewall config could lead to a RGE (Resume Generating Event)
   * Use the ```--timeout``` parameter to revert changes
   ```
         # firewall-cmd --add-service=ftp --timeout=30s
@@ -33,7 +32,8 @@
   * After timeout value, config returns to previous state
   * Wait 30s and issue last command again
 * Disable all network traffic (e.g. suspected breach or attack)
-  * For best results, issue the following command from a SSH session.  Warning: your session will lock up immediately
+  * Warning: your session will lock up immediately!  Make sure you have console access to the test system!
+  * Issue the following command from a SSH session, again make sure you can access the system console, your SSH session will lock up.  
   ```
         # firewall-cmd --panic-on
   ```
@@ -50,6 +50,14 @@
   * View predefined Services
   ```
         # firewall-cmd --get-services
+  ```
+  * View a specific Service
+  ```
+        # firewall-cmd --info-service=RH-Satellite-6
+  ```
+  * Shortcut to apply changes
+  ```
+        # firewall-cmd --runtime-to-permanent
   ```
 * Cleanup via firewalld-cleanup.sh
   * Optional if demo VM is disposable
